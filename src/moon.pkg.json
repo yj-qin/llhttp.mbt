@@ -1,0 +1,23 @@
+{
+    "targets": {
+        "llhttp.mbt": [
+            "native"
+        ],
+        "llhttp_test.mbt": [
+            "native"
+        ],
+        "util.mbt": [
+            "native"
+        ]
+    },
+    "import": [
+        "tonyfettes/encoding",
+        "tonyfettes/c"
+    ],
+    "native-stub": [
+        "llhttp#api.c",
+        "llhttp#http.c",
+        "llhttp#llhttp.c",
+        "stub.c"
+    ]
+}

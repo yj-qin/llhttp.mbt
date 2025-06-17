@@ -1,0 +1,265 @@
+package "yj-qin/llhttp"
+
+// Values
+
+// Types and methods
+pub(all) enum Errno {
+  OK
+  INTERNAL
+  STRICT
+  CR_EXPECTED
+  LF_EXPECTED
+  UNEXPECTED_CONTENT_LENGTH
+  UNEXPECTED_SPACE
+  CLOSED_CONNECTION
+  INVALID_METHOD
+  INVALID_URL
+  INVALID_CONSTANT
+  INVALID_VERSION
+  INVALID_HEADER_TOKEN
+  INVALID_CONTENT_LENGTH
+  INVALID_CHUNK_SIZE
+  INVALID_STATUS
+  INVALID_EOF_STATE
+  INVALID_TRANSFER_ENCODING
+  CB_MESSAGE_BEGIN
+  CB_HEADERS_COMPLETE
+  CB_MESSAGE_COMPLETE
+  CB_CHUNK_HEADER
+  CB_CHUNK_COMPLETE
+  PAUSED
+  PAUSED_UPGRADE
+  PAUSED_H2_UPGRADE
+  USER
+  CB_URL_COMPLETE
+  CB_STATUS_COMPLETE
+  CB_METHOD_COMPLETE
+  CB_VERSION_COMPLETE
+  CB_HEADER_FIELD_COMPLETE
+  CB_HEADER_VALUE_COMPLETE
+  CB_CHUNK_EXTENSION_NAME_COMPLETE
+  CB_CHUNK_EXTENSION_VALUE_COMPLETE
+  CB_RESET
+  CB_PROTOCOL_COMPLETE
+  UNKNOWN
+}
+fn Errno::of_int(Int) -> Self
+impl Show for Errno
+
+pub(all) enum Method {
+  DELETE
+  GET
+  HEAD
+  POST
+  PUT
+  CONNECT
+  OPTIONS
+  TRACE
+  COPY
+  LOCK
+  MKCOL
+  MOVE
+  PROPFIND
+  PROPPATCH
+  SEARCH
+  UNLOCK
+  BIND
+  REBIND
+  UNBIND
+  ACL
+  REPORT
+  MKACTIVITY
+  CHECKOUT
+  MERGE
+  MSEARCH
+  NOTIFY
+  SUBSCRIBE
+  UNSUBSCRIBE
+  PATCH
+  PURGE
+  MKCALENDAR
+  LINK
+  UNLINK
+  SOURCE
+  PRI
+  DESCRIBE
+  ANNOUNCE
+  SETUP
+  PLAY
+  PAUSE
+  TEARDOWN
+  GET_PARAMETER
+  SET_PARAMETER
+  REDIRECT
+  RECORD
+  FLUSH
+  QUERY
+  UNKNOWN
+}
+fn Method::of_int(Int) -> Self
+impl Show for Method
+
+type Parser
+fn Parser::errno(Self) -> Errno
+fn Parser::error_pos(Self) -> String
+fn Parser::error_reason(Self) -> String
+fn Parser::execute(Self, String) -> Errno
+fn Parser::finish(Self) -> Errno
+fn Parser::get_http_major(Self) -> Int
+fn Parser::get_http_minor(Self) -> Int
+fn Parser::get_method(Self) -> Method
+fn Parser::get_status_code(Self) -> Status
+fn Parser::get_type(Self) -> ParserType
+fn Parser::get_upgrade(Self) -> Bool
+fn Parser::message_needs_eof(Self) -> Bool
+fn Parser::new(parser_type~ : ParserType = ..) -> Self
+fn Parser::on_body(Self, (Self, Bytes) -> Errno) -> Unit
+fn Parser::on_chunk_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_chunk_extension_name(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_chunk_extension_name_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_chunk_extension_value(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_chunk_extension_value_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_chunk_header(Self, (Self) -> Errno) -> Unit
+fn Parser::on_header_field(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_header_field_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_header_value(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_header_value_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_headers_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_message_begin(Self, (Self) -> Errno) -> Unit
+fn Parser::on_message_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_method(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_method_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_protocol(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_protocol_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_reset(Self, (Self) -> Errno) -> Unit
+fn Parser::on_status(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_status_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_url(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_url_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::on_version(Self, (Self, String) -> Errno) -> Unit
+fn Parser::on_version_complete(Self, (Self) -> Errno) -> Unit
+fn Parser::pause(Self) -> Unit
+fn Parser::reset(Self) -> Unit
+fn Parser::resume_after_upgrade(Self) -> Unit
+fn Parser::resume_execute(Self) -> Unit
+fn Parser::set_error_reason(Self, String) -> Unit
+fn Parser::should_keep_alive(Self) -> Bool
+
+pub(all) enum ParserType {
+  BOTH
+  REQUEST
+  RESPONSE
+  UNKNOWN
+}
+fn ParserType::of_int(Int) -> Self
+impl Show for ParserType
+
+pub(all) enum Status {
+  CONTINUE
+  SWITCHING_PROTOCOLS
+  PROCESSING
+  EARLY_HINTS
+  RESPONSE_IS_STALE
+  REVALIDATION_FAILED
+  DISCONNECTED_OPERATION
+  HEURISTIC_EXPIRATION
+  MISCELLANEOUS_WARNING
+  OK
+  CREATED
+  ACCEPTED
+  NON_AUTHORITATIVE_INFORMATION
+  NO_CONTENT
+  RESET_CONTENT
+  PARTIAL_CONTENT
+  MULTI_STATUS
+  ALREADY_REPORTED
+  TRANSFORMATION_APPLIED
+  IM_USED
+  MISCELLANEOUS_PERSISTENT_WARNING
+  MULTIPLE_CHOICES
+  MOVED_PERMANENTLY
+  FOUND
+  SEE_OTHER
+  NOT_MODIFIED
+  USE_PROXY
+  SWITCH_PROXY
+  TEMPORARY_REDIRECT
+  PERMANENT_REDIRECT
+  BAD_REQUEST
+  UNAUTHORIZED
+  PAYMENT_REQUIRED
+  FORBIDDEN
+  NOT_FOUND
+  METHOD_NOT_ALLOWED
+  NOT_ACCEPTABLE
+  PROXY_AUTHENTICATION_REQUIRED
+  REQUEST_TIMEOUT
+  CONFLICT
+  GONE
+  LENGTH_REQUIRED
+  PRECONDITION_FAILED
+  PAYLOAD_TOO_LARGE
+  URI_TOO_LONG
+  UNSUPPORTED_MEDIA_TYPE
+  RANGE_NOT_SATISFIABLE
+  EXPECTATION_FAILED
+  IM_A_TEAPOT
+  PAGE_EXPIRED
+  ENHANCE_YOUR_CALM
+  MISDIRECTED_REQUEST
+  UNPROCESSABLE_ENTITY
+  LOCKED
+  FAILED_DEPENDENCY
+  TOO_EARLY
+  UPGRADE_REQUIRED
+  PRECONDITION_REQUIRED
+  TOO_MANY_REQUESTS
+  REQUEST_HEADER_FIELDS_TOO_LARGE_UNOFFICIAL
+  REQUEST_HEADER_FIELDS_TOO_LARGE
+  LOGIN_TIMEOUT
+  NO_RESPONSE
+  RETRY_WITH
+  BLOCKED_BY_PARENTAL_CONTROL
+  UNAVAILABLE_FOR_LEGAL_REASONS
+  CLIENT_CLOSED_LOAD_BALANCED_REQUEST
+  INVALID_X_FORWARDED_FOR
+  REQUEST_HEADER_TOO_LARGE
+  SSL_CERTIFICATE_ERROR
+  SSL_CERTIFICATE_REQUIRED
+  HTTP_REQUEST_SENT_TO_HTTPS_PORT
+  INVALID_TOKEN
+  CLIENT_CLOSED_REQUEST
+  INTERNAL_SERVER_ERROR
+  NOT_IMPLEMENTED
+  BAD_GATEWAY
+  SERVICE_UNAVAILABLE
+  GATEWAY_TIMEOUT
+  HTTP_VERSION_NOT_SUPPORTED
+  VARIANT_ALSO_NEGOTIATES
+  INSUFFICIENT_STORAGE
+  LOOP_DETECTED
+  BANDWIDTH_LIMIT_EXCEEDED
+  NOT_EXTENDED
+  NETWORK_AUTHENTICATION_REQUIRED
+  WEB_SERVER_UNKNOWN_ERROR
+  WEB_SERVER_IS_DOWN
+  CONNECTION_TIMEOUT
+  ORIGIN_IS_UNREACHABLE
+  TIMEOUT_OCCURED
+  SSL_HANDSHAKE_FAILED
+  INVALID_SSL_CERTIFICATE
+  RAILGUN_ERROR
+  SITE_IS_OVERLOADED
+  SITE_IS_FROZEN
+  IDENTITY_PROVIDER_AUTHENTICATION_ERROR
+  NETWORK_READ_TIMEOUT
+  NETWORK_CONNECT_TIMEOUT
+  UNKNOWN
+}
+fn Status::of_int(Int) -> Self
+impl Show for Status
+
+// Type aliases
+
+// Traits
+
