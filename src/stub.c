@@ -242,8 +242,9 @@ moonbit_llhttp_reset(moonbit_llhttp_t *parser) {
 MOONBIT_FFI_EXPORT
 llhttp_errno_t
 moonbit_llhttp_finish(moonbit_llhttp_t *parser) {
-  llhttp_finish(&parser->parser);
+  llhttp_errno_t errno = llhttp_finish(&parser->parser);
   moonbit_decref(parser);
+  return errno;
 }
 
 MOONBIT_FFI_EXPORT
