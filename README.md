@@ -12,43 +12,43 @@
   "Connection: keep-alive\r\n\r\n"
 
   let parser = @llhttp.Parser::new()
-  parser.on_message_begin(fn(_parser) {
+  parser.on_message_begin((_parser) => {
     println("message begin")
     OK
   })
-  parser.on_headers_complete(fn(_parser) {
+  parser.on_headers_complete((_parser) => {
     println("headers complete")
     OK
   })
-  parser.on_message_complete(fn(_parser) {
+  parser.on_message_complete((_parser) => {
     println("message complete")
     OK
   })
-  parser.on_protocol(fn(_parser, protocol) {
+  parser.on_protocol((_parser, protocol) => {
     println("protocol: \{protocol}")
     OK
   })
-  parser.on_url(fn(_parser, url) {
+  parser.on_url((_parser, url) => {
     println("url: \{url}")
     OK
   })
-  parser.on_status(fn(_parser, status) {
+  parser.on_status((_parser, status) => {
     println("status: \{status}")
     OK
   })
-  parser.on_method(fn(_parser, http_method) {
+  parser.on_method((_parser, http_method) => {
     println("method: \{http_method}")
     OK
   })
-  parser.on_version(fn(_parser, version) {
+  parser.on_version((_parser, version) => {
     println("version: \{version}")
     OK
   })
-  parser.on_header_field(fn(_parser, field) {
+  parser.on_header_field((_parser, field) => {
     println("header_field: \{field}")
     OK
   })
-  parser.on_header_value(fn(_parser, value) {
+  parser.on_header_value((_parser, value) => {
     println("header_value: \{value}")
     OK
   })
