@@ -332,6 +332,42 @@ test "websocket upgrade request" {
 }
 
 ///|
+test "unicode request" {
+  let payload = "{\"data\":\"你好，世界❤\"}"
+  let post_req : String = "POST /api HTTP/1.1\r\n" +
+    "Content-Type: application/json\r\n" +
+    "Content-Length: \{@encoding.encode(payload, encoding=UTF8).length()}\r\n\r\n\{payload}"
+  let ctx = TestContext::new()
+  let parser = setup_parser(ctx)
+  let errno = parser.execute(post_req)
+  inspect(errno, content="OK")
+  inspect(parser.get_type(), content="REQUEST")
+  @json.inspect(ctx, content={
+    "protocol": "HTTP",
+    "http_method": "POST",
+    "http_version": "1.1",
+    "url": "/api",
+    "status": "",
+    "callback_count": {
+      "message_begin": 1,
+      "method_complete": 1,
+      "url_complete": 1,
+      "protocol_complete": 1,
+      "version_complete": 1,
+      "header_field_complete": 2,
+      "header_value_complete": 2,
+      "headers_complete": 1,
+      "message_complete": 1,
+    },
+    "headers": { "Content-Type": "application/json", "Content-Length": "29" },
+    "chunk_extensions": {},
+    "body": "{\"data\":\"你好，世界❤\"}",
+    "temp_header_field": "",
+    "temp_chunk_ext_name": "",
+  })
+}
+
+///|
 test "ok response" {
   let ok_resp : String = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: 11\r\n\r\nHello World"
   let ctx = TestContext::new()
@@ -396,6 +432,38 @@ test "chunked response" {
     "headers": { "Transfer-Encoding": "chunked" },
     "chunk_extensions": {},
     "body": "Hello, world!",
+    "temp_header_field": "",
+    "temp_chunk_ext_name": "",
+  })
+}
+
+///|
+test "unicode response" {
+  let payload = "你好，世界❤"
+  let ok_resp : String = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: \{@encoding.encode(payload, encoding=UTF8).length()}\r\n\r\n\{payload}"
+  let ctx = TestContext::new()
+  let parser = setup_parser(ctx)
+  let errno = parser.execute(ok_resp)
+  inspect(errno, content="OK")
+  inspect(parser.get_type(), content="RESPONSE")
+  @json.inspect(ctx, content={
+    "protocol": "",
+    "http_method": "HTTP/",
+    "http_version": "1.1",
+    "url": "",
+    "status": "OK",
+    "callback_count": {
+      "message_begin": 1,
+      "version_complete": 1,
+      "status_complete": 1,
+      "header_field_complete": 2,
+      "header_value_complete": 2,
+      "headers_complete": 1,
+      "message_complete": 1,
+    },
+    "headers": { "Content-Type": "text/html", "Content-Length": "18" },
+    "chunk_extensions": {},
+    "body": "你好，世界❤",
     "temp_header_field": "",
     "temp_chunk_ext_name": "",
   })
