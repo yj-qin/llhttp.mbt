@@ -10,5 +10,6 @@
   "license": "MIT",
   "keywords": ["http", "parser", "native"],
   "description": "llhttp bindings for MoonBit",
-  "source": "src"
+  "source": "src",
+  "preferred-target" : "native"
 }
